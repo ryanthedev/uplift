@@ -14,7 +14,7 @@ picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pics')
 try:
     logging.info("Initializing e-Paper display")
     epd = epd7in5_V2.EPD()
-    
+
     logging.info("Initializing and clearing display")
     epd.init()
     epd.Clear()
@@ -27,27 +27,21 @@ try:
         epd.sleep()
         sys.exit()
 
-    # Iterate through each image and display it
-    for image_file in image_files:
-        image_path = os.path.join(picdir, image_file)
-        logging.info(f"Displaying image: {image_path}")
+    # Loop forever over the images
+    while True:
+        for image_file in image_files:
+            image_path = os.path.join(picdir, image_file)
+            logging.info(f"Displaying image: {image_path}")
 
-        # Open and resize the image to fit the display
-        Himage = Image.open(image_path).convert('1')
-        Himage = Himage.resize((epd.width, epd.height), Image.ANTIALIAS)
+            # Open and resize the image to fit the display
+            Himage = Image.open(image_path).convert('1')
+            Himage = Himage.resize((epd.width, epd.height), Image.ANTIALIAS)
 
-        # Display the image
-        epd.display(epd.getbuffer(Himage))
-        
-        # Wait for 10 seconds before showing the next image
-        time.sleep(10)
+            # Display the image
+            epd.display(epd.getbuffer(Himage))
 
-    logging.info("All images displayed. Clearing display...")
-    epd.init()
-    epd.Clear()
-
-    logging.info("Putting display to sleep...")
-    epd.sleep()
+            # Wait for 10 seconds before showing the next image
+            time.sleep(10)
 
 except IOError as e:
     logging.error(e)
